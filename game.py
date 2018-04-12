@@ -1,64 +1,19 @@
-'''import os
-import pygame
-import time
-import random'''
-import sys
-
-
+import os, pygame, time, random, sys
 from commands import *
 from player import *
 from util import *
+from item import *
+from weapon import *
+from armor import *
 
 commands = {
-    'help': help,
-    'exit': exit,
-}
+        'help': help,
+        'exit': exit,
+        'inv': inv,
+        'lvl': lvl,
+    }
 
-player = Player("Default", 1, 1, 1)
-
-def nameInput(prompt):
-	name = input(prompt)
-	return name.strip()
-
-def getName():
-	tempName = ""
-	while 1:
-		tempName = nameInput("What is your name? ")
-		if len(tempName) < 1:
-			continue
-		yes = yesOrNo(tempName + ", is that your name?")
-
-		if yes:
-			return tempName
-		else:
-			continue
-
-def isValidCMD(cmd):
-    if cmd in commands:
-        return True
-    return False
-
-
-def runCMD(cmd, args, player):
-    commands[cmd](player, args)
-
-def main(player):
-    player.name = getName()
-
-    while (not player.dead):
-        line = raw_input(">> ")
-        input = line.split()
-        input.append("EOI")
-        if isValidCMD(input[0]):
-            runCMD(input[0], input[1], player)
-
-main(player)   
-
-
-
-#pygame.init()
-
-'''#colors
+#colors
 white = (255,255,255)
 black = (0,0,0)
 red = (240,32,32)
@@ -69,7 +24,120 @@ blue = (0,61,204)
 indigo = (29,0,51)
 violet = (138,43,226)
 
-#display
+player = Player("Default", 1, 1, 1)
+
+pygame.init()
+
+clock = pygame.time.Clock()
+FPS = 20
+
+smallfont = pygame.font.SysFont("comicsansms", 25)
+medfont = pygame.font.SysFont("comicsansms", 45)
+largefont = pygame.font.SysFont("comicsansms", 65)
+
+def wait():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    command_prompted = False
+                else:
+                    continue
+
+def text_objects(text,color,size):
+    if size == "small":
+        textSurface = smallfont.render(text, True, color)
+    elif size == "med":
+        textSurface = medfont.render(text, True, color)
+    elif size == "large":
+        textSurface = largefont.render(text, True, color)
+    return textSurface, textSurface.get_rect()
+
+def message_to_screen(msg,color, y_displace = 0, size = "small"):
+    textSurf, textRect = text_objects(msg,color,size)
+    textRect.center = (display_width / 2), (display_height / 2) + y_displace
+    window.blit(textSurf, textRect)
+
+
+def create_window():
+    global window, display_height, display_width, window_title
+    display_width, display_height = 800, 600
+    window_title = "First RPG"
+    pygame.display.set_caption(window_title)
+    window = pygame.display.set_mode((display_width, display_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
+
+def command_mode():
+    command_prompted = True
+    while command_prompted:
+        message_to_screen("COMMAND MODE", black, 0, "large")
+        pygame.display.update()
+        line = raw_input(">> ")
+        input = line.split()
+        input.append("EOI")
+        if isValidCMD(input[0]):
+            runCMD(input[0], input[1], player)
+        clock.tick(5)
+        
+        
+
+isRunning = True
+
+def nameInput(prompt):
+        name = raw_input(prompt)
+        return name
+
+def getName():
+        Name = ""
+        while 1:
+            Name = nameInput("What is your name? ")
+            if len(Name) < 2:
+                continue
+            yes = yesOrNo(Name + ", is that your name? ")
+
+            if yes:
+                return Name
+            else:
+                continue
+
+def isValidCMD(cmd):
+        if cmd in commands:
+            return True
+        return False
+
+def runCMD(cmd, args, player):
+        commands[cmd](player, args)
+
+player.name = getName()
+
+create_window()
+
+while isRunning:
+
+    clock.tick(FPS)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            isRunning = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_c:
+                command_mode()
+
+
+    window.fill(white)
+    pygame.display.update()
+   
+pygame.quit()
+sys.exit()
+
+
+
+
+
+
+'''#display
 display_width = 1920
 display_height = 1080
 gameDisplay = pygame.display.set_mode((display_width, display_height))

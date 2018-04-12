@@ -10,12 +10,12 @@ def cls(lines = 100):
 
 def yesOrNo(prompt = "(Y/N)?"):
 	while 1:
-		answer = input(prompt)
+		answer = raw_input(prompt)
 		answer = answer.strip()
 		answer = answer.lower()
 
-		yes = ['yes', 'y', 'ye', 'Y', 'Yes', 'YES', 'YEs', 'yup', 'yep', 'Yup', 'YUP', 'YUp', 'Yep', 'YEP', 'YEp']
-		no = ['no', 'n', 'No', 'NO', 'N', 'nope', 'NOPE', 'Nope']
+		yes = ['yes', 'y', 'ye', 'Y', 'Yes', 'YES', 'YEs', 'yup', 'yep', 'Yup', 'YUP', 'YUp', 'Yep', 'YEP', 'YEp', 'yuh']
+		no = ['no', 'n', 'No', 'NO', 'N', 'nope', 'NOPE', 'Nope', 'nah']
 
 		if answer in yes:
 			return True
