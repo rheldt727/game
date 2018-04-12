@@ -13,7 +13,7 @@ commands = {
         'lvl': lvl,
     }
 
-#colors
+#CLRS
 white = (255,255,255)
 black = (0,0,0)
 red = (240,32,32)
@@ -26,26 +26,19 @@ violet = (138,43,226)
 
 player = Player("Default", 1, 1, 1)
 
+cSec = 0
+cFrame = 0
+FPS = 0
+
 pygame.init()
 
 clock = pygame.time.Clock()
-FPS = 20
+
+#MSG TO WINDOW
 
 smallfont = pygame.font.SysFont("comicsansms", 25)
 medfont = pygame.font.SysFont("comicsansms", 45)
 largefont = pygame.font.SysFont("comicsansms", 65)
-
-def wait():
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
-                    command_prompted = False
-                else:
-                    continue
 
 def text_objects(text,color,size):
     if size == "small":
@@ -61,6 +54,7 @@ def message_to_screen(msg,color, y_displace = 0, size = "small"):
     textRect.center = (display_width / 2), (display_height / 2) + y_displace
     window.blit(textSurf, textRect)
 
+#WINDOW
 
 def create_window():
     global window, display_height, display_width, window_title
@@ -68,6 +62,25 @@ def create_window():
     window_title = "First RPG"
     pygame.display.set_caption(window_title)
     window = pygame.display.set_mode((display_width, display_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
+
+#FPS
+
+def fps_wind():
+    text_fps = smallfont.render(str(FPS), True, black)
+    window.blit(text_fps, [0,0])
+
+def fps_rate():
+    global cSec, cFrame, FPS
+
+    if cSec == time.strftime("%S"):
+        cFrame += 1
+    else:
+        FPS = cFrame
+        cFrame = 0
+        time.strftime("%S")
+
+
+#MODES
 
 def command_mode():
     command_prompted = True
@@ -79,11 +92,31 @@ def command_mode():
         input.append("EOI")
         if isValidCMD(input[0]):
             runCMD(input[0], input[1], player)
+        yes = yesOrNo("Continue using cm? ")
+
+        if yes:
+            continue
+        else:
+            command_prompted = False
+        clock.tick(5)
+
+def pause():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+               pygame.quit()
+               quit()
+            if event.type == pygame.KEYDOWN:
+               if event.key == pygame.K_p:
+                    paused = False    
+        message_to_screen("PAUSED", black, 0, "large")
+        pygame.display.update()
         clock.tick(5)
         
-        
-
 isRunning = True
+
+#GETNAME FUNCS
 
 def nameInput(prompt):
         name = raw_input(prompt)
@@ -102,6 +135,8 @@ def getName():
             else:
                 continue
 
+#CMD FUNCS
+
 def isValidCMD(cmd):
         if cmd in commands:
             return True
@@ -114,9 +149,9 @@ player.name = getName()
 
 create_window()
 
-while isRunning:
+#GAME LOOP
 
-    clock.tick(FPS)
+while isRunning:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -124,10 +159,21 @@ while isRunning:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_c:
                 command_mode()
+            if event.key == pygame.K_p:
+                pause()
 
+    #LOGIC
+    fps_rate()
 
+    #RENDER
     window.fill(white)
+
+    fps_wind()
+
     pygame.display.update()
+
+    clock.tick(30)#BECAUSE PYGAME SCREWS UP
+    print(FPS)
    
 pygame.quit()
 sys.exit()
