@@ -10,7 +10,9 @@ commands = {
         'help': help,
         'exit': exit,
         'inv': inv,
-        'lvl': lvl,
+        'levl': levl,
+        'save': save,
+        'disp': disp,
     }
 
 #CLRS
@@ -24,15 +26,7 @@ blue = (0,61,204)
 indigo = (29,0,51)
 violet = (138,43,226)
 
-player = Player("Default", 1, 1, 1)
-
-cSec = 0
-cFrame = 0
-FPS = 0
-
 pygame.init()
-
-clock = pygame.time.Clock()
 
 #MSG TO WINDOW
 
@@ -65,6 +59,10 @@ def create_window():
 
 #FPS
 
+cSec = 0
+cFrame = 0
+FPS = 0
+
 def fps_wind():
     text_fps = smallfont.render(str(FPS), True, black)
     window.blit(text_fps, [0,0])
@@ -72,12 +70,12 @@ def fps_wind():
 def fps_rate():
     global cSec, cFrame, FPS
 
-    if cSec == time.strftime("%S"):
+    if cSec == time.strftime("%S") and cSec < 144:
         cFrame += 1
     else:
         FPS = cFrame
         cFrame = 0
-        time.strftime("%S")
+        cSec = time.strftime("%S")
 
 
 #MODES
@@ -113,8 +111,6 @@ def pause():
         message_to_screen("PAUSED", black, 0, "large")
         pygame.display.update()
         clock.tick(5)
-        
-isRunning = True
 
 #GETNAME FUNCS
 
@@ -145,6 +141,12 @@ def isValidCMD(cmd):
 def runCMD(cmd, args, player):
         commands[cmd](player, args)
 
+player = Player("Default", 1, 1, 1)
+
+clock = pygame.time.Clock()
+
+isRunning = True
+
 player.name = getName()
 
 create_window()
@@ -171,9 +173,6 @@ while isRunning:
     fps_wind()
 
     pygame.display.update()
-
-    clock.tick(30)#BECAUSE PYGAME SCREWS UP
-    print(FPS)
    
 pygame.quit()
 sys.exit()
