@@ -50,6 +50,8 @@ def message_to_screen(msg,color, y_displace = 0, size = "small"):
 
 #WINDOW
 
+tile_size = 32
+
 def create_window():
     global window, display_height, display_width, window_title
     display_width, display_height = 800, 600
@@ -57,11 +59,12 @@ def create_window():
     pygame.display.set_caption(window_title)
     window = pygame.display.set_mode((display_width, display_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
 
+
 #FPS
 
-cSec = 0
+FPS = 60
+'''cSec = 0
 cFrame = 0
-FPS = 0
 
 def fps_wind():
     text_fps = smallfont.render(str(FPS), True, black)
@@ -70,13 +73,12 @@ def fps_wind():
 def fps_rate():
     global cSec, cFrame, FPS
 
-    if cSec == time.strftime("%S") and cSec < 144:
+    if cSec == time.strftime("%S"):
         cFrame += 1
     else:
         FPS = cFrame
         cFrame = 0
-        cSec = time.strftime("%S")
-
+        cSec = time.strftime("%S")'''
 
 #MODES
 
@@ -165,14 +167,18 @@ while isRunning:
                 pause()
 
     #LOGIC
-    fps_rate()
 
     #RENDER
     window.fill(white)
 
-    fps_wind()
+    # - TILES
+    for x in range(0, 640, tile_size):
+        for y in range(0, 480, tile_size):
+            pygame.draw.rect(window, black, (x, y, tile_size + 1, tile_size + 1), 1)
 
     pygame.display.update()
+
+    clock.tick(FPS)
    
 pygame.quit()
 sys.exit()
