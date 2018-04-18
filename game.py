@@ -5,6 +5,7 @@ from util import *
 from item import *
 from weapon import *
 from armor import *
+from spritesheet import *
 
 commands = {
         'help': help,
