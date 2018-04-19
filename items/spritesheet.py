@@ -24,3 +24,5 @@ class spritesheet:
 	def draw(self, surface, cellIndex, x, y, handle = 0):
 		surface.blit(self.sheet, (x + self.handle[handle][0], y + self.handle[handle][1]), self.cells[cellIndex])
 
+	#CENTER_HANDLE(0) = TOP LEFT
+	#CENTER_HANDLE(4) = CENTER

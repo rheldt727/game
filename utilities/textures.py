@@ -1,21 +1,20 @@
-import pygame
+'''import pygame
 from spritesheet import *
+from game import *
 
 pygame.init()
 
+
+
 class Tiles:
 	
-	Size = 32
-
-	def Load_Texture(index, Size):
-		TILESHEET = spritesheet("itemsheet", 64, 95)
-		CENTER_HANDLE = 0
-
-		bitmap = 
+	def __init__(self, index, size = 32):
+		self.index = index
+		self.size = size
 		
-		bitmap = pygame.transform.scale(bitmap, (Size, Size))
-		surface = pygame.Surface((Size, Size), pygame.HWSURFACE|pygame.SRCALPHA)
-		surface.blit(bitmap, (0, 0))
-		return surface
+	def Load_Texture(self, index):
+		CENTER_HANDLE = 0
+		
+		
 
-	
+'''

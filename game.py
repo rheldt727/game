@@ -6,6 +6,7 @@ from item import *
 from weapon import *
 from armor import *
 from spritesheet import *
+from textures import *
 
 commands = {
         'help': help,
@@ -60,6 +61,10 @@ def create_window():
     pygame.display.set_caption(window_title)
     window = pygame.display.set_mode((display_width, display_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
 
+#TILES
+
+TILESHEET = spritesheet("itemsheet.jpg", 64, 95)
+index = 589
 
 #FPS
 
@@ -175,7 +180,8 @@ while isRunning:
     # - TILES
     for x in range(0, 640, tile_size):
         for y in range(0, 480, tile_size):
-            pygame.draw.rect(window, black, (x, y, tile_size + 1, tile_size + 1), 1)
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, (x, y), CENTER_HANDLE)
+            pygame.draw.circle(window, white, (x, y), 2, 0)
 
     pygame.display.update()
 
