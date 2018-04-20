@@ -1,20 +1,15 @@
-'''import pygame
-from spritesheet import *
-from game import *
 
-pygame.init()
+def Tile(name, index):
+	index = index
+	name = name
+
+Grass = Tile("Grass", 589)
+
+Stone = Tile("Stone", 462)
+
+Water = Tile("Water", 281)
 
 
-
-class Tiles:
-	
-	def __init__(self, index, size = 32):
-		self.index = index
-		self.size = size
-		
-	def Load_Texture(self, index):
-		CENTER_HANDLE = 0
 		
 		
 
-'''
