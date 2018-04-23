@@ -156,8 +156,6 @@ create_window()
 
 #TEXTURES
 
-
-
 class spritesheet():
     def __init__(self, filename, cols, rows):
         self.sheet = pygame.image.load(filename).convert_alpha()
@@ -184,7 +182,7 @@ class spritesheet():
     #CENTER_HANDLE(4) = CENTER
 
 TILESHEET = spritesheet("itemsheet.jpg", 64, 95)
-index = 0
+index = 460
 CENTER_HANDLE = 0
 
 
@@ -199,10 +197,28 @@ while isRunning:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_c:
                 command_mode()
-            if event.key == pygame.K_p:
+            elif event.key == pygame.K_p:
                 pause()
+            elif event.key == pygame.K_w:
+                Globals.camera_move = 1
+            elif event.key == pygame.K_s:
+                Globals.camera_move = 2
+            elif event.key == pygame.K_a:
+                Globals.camera_move = 3
+            elif event.key == pygame.K_d:
+                Globals.camera_move = 4
+        elif event.type == pygame.KEYUP:
+            Globals.camera_move = 0
 
     #LOGIC
+    if Globals.camera_move == 1:
+        Globals.camera_y += 1
+    elif Globals.camera_move == 2:
+        Globals.camera_y -= 1
+    elif Globals.camera_move == 3:
+        Globals.camera_x += 1
+    elif Globals.camera_move == 4:
+        Globals.camera_x -= 1
 
     #RENDER
     window.fill(white)
@@ -210,7 +226,7 @@ while isRunning:
     # - TILES
     for x in range(0, 640, tile_size):
         for y in range(0, 480, tile_size):
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x, y, CENTER_HANDLE, Stone)
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE, Grass)
             #pygame.draw.circle(window, white, (x, y), 2, 0)
 
     pygame.display.update()

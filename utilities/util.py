@@ -24,3 +24,8 @@ def yesOrNo(prompt = "(Y/N)?"):
 		else:
 			continue
 	return False
+
+class Globals:
+	camera_x = 0
+	camera_y = 0
+	camera_move = 0
