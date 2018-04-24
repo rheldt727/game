@@ -64,22 +64,9 @@ def create_window():
 #FPS
 
 FPS = 60
-'''cSec = 0
-cFrame = 0
 
-def fps_wind():
-    text_fps = smallfont.render(str(FPS), True, black)
-    window.blit(text_fps, [0,0])
-
-def fps_rate():
-    global cSec, cFrame, FPS
-
-    if cSec == time.strftime("%S"):
-        cFrame += 1
-    else:
-        FPS = cFrame
-        cFrame = 0
-        cSec = time.strftime("%S")'''
+#MAP
+map_data = [(5, 6, "2"), (20, 47, "3")]
 
 #MODES
 
@@ -175,17 +162,15 @@ class spritesheet():
             (0, -hh), (-hw, -hh), (-w, -hh),
             (0, -h), (-hw, -h), (-w, -h),])
 
-    def draw(self, surface, cellIndex, x, y, handle = 0, tile = ""):
+    def draw(self, surface, cellIndex, x, y, handle = 0):
         surface.blit(self.sheet, (x + self.handle[handle][0], y + self.handle[handle][1]), self.cells[cellIndex])
 
     #CENTER_HANDLE(0) = TOP LEFT
     #CENTER_HANDLE(4) = CENTER
 
 TILESHEET = spritesheet("itemsheet.jpg", 64, 95)
-index = 460
 CENTER_HANDLE = 0
-
-
+index = 0
 
 #GAME LOOP
 
@@ -212,13 +197,13 @@ while isRunning:
 
     #LOGIC
     if Globals.camera_move == 1:
-        Globals.camera_y += 1
+        Globals.camera_y += 32
     elif Globals.camera_move == 2:
-        Globals.camera_y -= 1
+        Globals.camera_y -= 32
     elif Globals.camera_move == 3:
-        Globals.camera_x += 1
+        Globals.camera_x += 32
     elif Globals.camera_move == 4:
-        Globals.camera_x -= 1
+        Globals.camera_x -= 32
 
     #RENDER
     window.fill(white)
@@ -226,7 +211,11 @@ while isRunning:
     # - TILES
     for x in range(0, 640, tile_size):
         for y in range(0, 480, tile_size):
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE, Grass)
+            for i in map_data:
+            # if cells[x][y] == 6:
+            #index = Grass()
+
+                TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
             #pygame.draw.circle(window, white, (x, y), 2, 0)
 
     pygame.display.update()

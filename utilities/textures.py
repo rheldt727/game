@@ -1,18 +1,15 @@
+    
+def Grass():
+	return 589
 
-def Tile(self, name = None, index = None):
-	if name == None:
-		self.name = name
-		self.raw = name.strip().lower()
-	self.index = index
-	
+def Stone():
+	return 460
 
-Grass = Tile("Grass", 589)
+def Water():
+	return 1442
 
-Stone = Tile("Stone", 460)
-
-Water = Tile("Water", 281)
-
-
-		
-		
-
+Texture_Tags = {
+"1" : Grass(), 
+"2" : Stone(), 
+"3" : Water()
+}
