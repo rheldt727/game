@@ -66,7 +66,13 @@ def create_window():
 FPS = 60
 
 #MAP
-map_data = [(5, 6, "2"), (20, 47, "3")]
+
+map_data = []
+for x in range(20):
+    for y in range(15):
+        map_data.append((x, y, "1"))
+
+
 
 #MODES
 
@@ -212,11 +218,18 @@ while isRunning:
     for x in range(0, 640, tile_size):
         for y in range(0, 480, tile_size):
             for i in map_data:
-            # if cells[x][y] == 6:
-            #index = Grass()
-
-                TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
-            #pygame.draw.circle(window, white, (x, y), 2, 0)
+                tile = (i[0] * tile_size, i[1] * tile_size)
+                if (x,y) == tile:
+                    if (i[2]) == "1":
+                        index = Grass()
+                        TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+                    elif (i[2]) == "2":
+                        index = Stone()
+                        TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+                    elif (i[2]) == "3":
+                        index = Water()
+                        TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+            
 
     pygame.display.update()
 
