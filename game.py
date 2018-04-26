@@ -6,6 +6,7 @@ from item import *
 from weapon import *
 from armor import *
 from textures import *
+from map_engine import *
 
 commands = {
         'help': help,
@@ -51,8 +52,6 @@ def message_to_screen(msg,color, y_displace = 0, size = "small"):
 
 #WINDOW
 
-tile_size = 32
-
 def create_window():
     global window, display_height, display_width, window_title
     display_width, display_height = 800, 600
@@ -67,11 +66,13 @@ FPS = 60
 
 #MAP
 
-map_data = []
-for x in range(20):
-    for y in range(15):
-        map_data.append((x, y, "1"))
-
+# map_data = []
+# for x in range(20):
+#     for y in range(15):
+#         map_data.append((x, y, "3"))
+# for x in range(2, 18):
+#     for y in range(2, 13):
+#         map_data.append((x, y, "1"))
 
 
 #MODES
@@ -215,20 +216,20 @@ while isRunning:
     window.fill(white)
 
     # - TILES
-    for x in range(0, 640, tile_size):
-        for y in range(0, 480, tile_size):
-            for i in map_data:
-                tile = (i[0] * tile_size, i[1] * tile_size)
-                if (x,y) == tile:
-                    if (i[2]) == "1":
-                        index = Grass()
-                        TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
-                    elif (i[2]) == "2":
-                        index = Stone()
-                        TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
-                    elif (i[2]) == "3":
-                        index = Water()
-                        TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+    # for x in range(0, 640, tile_size):
+    #     for y in range(0, 480, tile_size):
+    #         for i in map_data:
+    #             tile = (i[0] * tile_size, i[1] * tile_size)
+    #             if (x,y) == tile:
+    #                 if (i[2]) == "1":
+    #                     index = Grass()
+    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+    #                 elif (i[2]) == "2":
+    #                     index = Stone()
+    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+    #                 elif (i[2]) == "3":
+    #                     index = Water()
+    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
             
 
     pygame.display.update()
