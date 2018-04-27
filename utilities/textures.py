@@ -1,4 +1,4 @@
-    
+
 tile_size = 32
 
 def Grass():

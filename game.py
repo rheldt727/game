@@ -66,6 +66,8 @@ FPS = 60
 
 #MAP
 
+terrain = load_map("maps//world.map")
+
 # map_data = []
 # for x in range(20):
 #     for y in range(15):
@@ -214,6 +216,8 @@ while isRunning:
 
     #RENDER
     window.fill(white)
+
+    window.blit(terrain, (Globals.camera_x, Globals.camera_y))
 
     # - TILES
     # for x in range(0, 640, tile_size):

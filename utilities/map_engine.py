@@ -2,7 +2,7 @@ import pygame
 from textures import *
 
 def add_tile(tile, pos, addTo):
-	addTo.blit(tile, (pos[0] * Tiles.Size, pos[1] * Tiles.Size))
+	addTo.blit(tile, (pos[0] * tile_size, pos[1] * tile_size))
 
 def load_map(file):
     with open(file, "r") as mapfile:
@@ -13,9 +13,11 @@ def load_map(file):
 
 	map_size = map_data[len(map_data) - 1] #map dimensions
 	map_data.remove(map_size)
-	map_size = map_size.splt(",")
+	map_size = map_size.split(",")
 	map_size[0] = int(map_size[0]) * tile_size
 	map_size[1] = int(map_size[1]) * tile_size
+
+	tiles = []
 
 	for tile in range(len(map_data)):
 		map_data[tile] = map_data[tile].replace("\n", "")
@@ -32,8 +34,23 @@ def load_map(file):
 	terrain = pygame.Surface(map_size, pygame.HWSURFACE)
 
 	for tile in tiles:
-		if tile[1] == 1:
-			#add_tile(Texture_Tags[tile[1]], tile[0])
-			Grass()
-			TILESHEET.draw(window, index%TILESHEET.totalCellCount, pos[0] * Tiles.Size, pos[1] * Tiles.Size, CENTER_HANDLE)
+		if tile[1] in Texture_Tags:
+			add_tile(Texture_Tags[tile[1]], tile[0], terrain)
+	    	# if tile[1] == 1:
+	    	# 	index = Grass()
+	    	# 	add_tile()
+	    	# 	#TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0] * tile_size, CENTER_HANDLE)
+	     #    if tile[1] == 2:
+	    	# 	index = Stone()
+	    	# 	add_tile()
+	     #    	#TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0] * tile_size, CENTER_HANDLE)
+	    	# if tile[1] == 3:
+	    	# 	index = Water()
+	    	# 	add_tile()
+	     #    	#TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0] * tile_size, CENTER_HANDLE)
+
+	return terrain
+
+
+
 
