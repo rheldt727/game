@@ -66,7 +66,7 @@ FPS = 60
 
 #MAP
 
-terrain = load_map("maps//world.map")
+load_map("maps//world.map")
 
 # map_data = []
 # for x in range(20):
@@ -217,7 +217,16 @@ while isRunning:
     #RENDER
     window.fill(white)
 
-    window.blit(terrain, (Globals.camera_x, Globals.camera_y))
+    for tile in tiles:
+        if tile[1] == 1:
+            index = Grass()
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+        elif tile[1] == 2:
+            index = Stone()
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+        elif tile[1] == 3:
+            index = Water()
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
 
     # - TILES
     # for x in range(0, 640, tile_size):

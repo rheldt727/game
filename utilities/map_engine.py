@@ -17,6 +17,7 @@ def load_map(file):
 	map_size[0] = int(map_size[0]) * tile_size
 	map_size[1] = int(map_size[1]) * tile_size
 
+	global tiles 
 	tiles = []
 
 	for tile in range(len(map_data)):
@@ -31,26 +32,8 @@ def load_map(file):
 		tiles[tiles.index(tile)] = (pos, tile[1])#save tile to list
 
 
-	terrain = pygame.Surface(map_size, pygame.HWSURFACE)
-
-	for tile in tiles:
-		if tile[1] in Texture_Tags:
-			add_tile(Texture_Tags[tile[1]], tile[0], terrain)
-	    	# if tile[1] == 1:
-	    	# 	index = Grass()
-	    	# 	add_tile()
-	    	# 	#TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0] * tile_size, CENTER_HANDLE)
-	     #    if tile[1] == 2:
-	    	# 	index = Stone()
-	    	# 	add_tile()
-	     #    	#TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0] * tile_size, CENTER_HANDLE)
-	    	# if tile[1] == 3:
-	    	# 	index = Water()
-	    	# 	add_tile()
-	     #    	#TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0] * tile_size, CENTER_HANDLE)
-
-	return terrain
-
+	
+	    	
 
 
 
