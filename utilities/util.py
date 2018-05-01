@@ -26,6 +26,7 @@ def yesOrNo(prompt = "(Y/N)?"):
 	return False
 
 class Globals:
-	camera_x = 0
-	camera_y = 0
-	camera_move = 0
+	def __init__(self):
+		self.camera_x = 0
+		self.camera_y = 0
+		self.camera_move = 0

@@ -66,7 +66,7 @@ FPS = 60
 
 #MAP
 
-load_map("maps//world.map")
+terrain = load_map("/home/ryanh/Desktop/projgame/maps/world.map")
 
 # map_data = []
 # for x in range(20):
@@ -183,8 +183,10 @@ index = 0
 
 #GAME LOOP
 
-while isRunning:
+Globes = Globals()
 
+
+while isRunning:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             isRunning = False
@@ -194,39 +196,32 @@ while isRunning:
             elif event.key == pygame.K_p:
                 pause()
             elif event.key == pygame.K_w:
-                Globals.camera_move = 1
+                Globes.camera_move = 1
             elif event.key == pygame.K_s:
-                Globals.camera_move = 2
+                Globes.camera_move = 2
             elif event.key == pygame.K_a:
-                Globals.camera_move = 3
+                Globes.camera_move = 3
             elif event.key == pygame.K_d:
-                Globals.camera_move = 4
+                Globes.camera_move = 4
         elif event.type == pygame.KEYUP:
-            Globals.camera_move = 0
+            Globes.camera_move = 0
 
     #LOGIC
-    if Globals.camera_move == 1:
-        Globals.camera_y += 32
-    elif Globals.camera_move == 2:
-        Globals.camera_y -= 32
-    elif Globals.camera_move == 3:
-        Globals.camera_x += 32
-    elif Globals.camera_move == 4:
-        Globals.camera_x -= 32
+    if Globes.camera_move == 1:
+        Globes.camera_y += 32
+    elif Globes.camera_move == 2:
+        Globes.camera_y -= 32
+    elif Globes.camera_move == 3:
+        Globes.camera_x += 32
+    elif Globes.camera_move == 4:
+        Globes.camera_x -= 32
 
     #RENDER
     window.fill(white)
 
-    for tile in tiles:
-        if tile[1] == 1:
-            index = Grass()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
-        elif tile[1] == 2:
-            index = Stone()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
-        elif tile[1] == 3:
-            index = Water()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+    window.blit(terrain, (Globes.camera_x, Globes.camera_y))
+
+    
 
     # - TILES
     # for x in range(0, 640, tile_size):
@@ -236,13 +231,13 @@ while isRunning:
     #             if (x,y) == tile:
     #                 if (i[2]) == "1":
     #                     index = Grass()
-    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globes.camera_x, y + Globes.camera_y, CENTER_HANDLE)
     #                 elif (i[2]) == "2":
     #                     index = Stone()
-    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globes.camera_x, y + Globes.camera_y, CENTER_HANDLE)
     #                 elif (i[2]) == "3":
     #                     index = Water()
-    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globals.camera_x, y + Globals.camera_y, CENTER_HANDLE)
+    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globes.camera_x, y + Globes.camera_y, CENTER_HANDLE)
             
 
     pygame.display.update()
