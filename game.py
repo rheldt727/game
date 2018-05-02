@@ -6,7 +6,7 @@ from item import *
 from weapon import *
 from armor import *
 from textures import *
-from map_engine import *
+from spritesheet import *
 
 commands = {
         'help': help,
@@ -64,17 +64,6 @@ def create_window():
 
 FPS = 60
 
-#MAP
-
-terrain = load_map("/home/ryanh/Desktop/projgame/maps/world.map")
-
-# map_data = []
-# for x in range(20):
-#     for y in range(15):
-#         map_data.append((x, y, "3"))
-# for x in range(2, 18):
-#     for y in range(2, 13):
-#         map_data.append((x, y, "1"))
 
 
 #MODES
@@ -152,34 +141,68 @@ create_window()
 
 #TEXTURES
 
-class spritesheet():
-    def __init__(self, filename, cols, rows):
-        self.sheet = pygame.image.load(filename).convert_alpha()
-
-        self.cols = cols
-        self.rows = rows
-        self.totalCellCount = cols * rows
-
-        self.rect = self.sheet.get_rect()
-        w = self.cellWidth = self.rect.width / cols
-        h = self.cellHeight = self.rect.height / rows
-        hw, hh = self.cellCenter = (w / 2, h / 2)
-
-        self.cells = list([(index % cols * w, index / cols * h, w, h) for index in range(self.totalCellCount)])
-        self.handle = list([
-            (0, 0), (-hw, 0), (-w, 0),
-            (0, -hh), (-hw, -hh), (-w, -hh),
-            (0, -h), (-hw, -h), (-w, -h),])
-
-    def draw(self, surface, cellIndex, x, y, handle = 0):
-        surface.blit(self.sheet, (x + self.handle[handle][0], y + self.handle[handle][1]), self.cells[cellIndex])
-
-    #CENTER_HANDLE(0) = TOP LEFT
-    #CENTER_HANDLE(4) = CENTER
-
 TILESHEET = spritesheet("itemsheet.jpg", 64, 95)
 CENTER_HANDLE = 0
 index = 0
+
+#MAP
+
+def load_map(file):
+    with open(file, "r") as mapfile:
+        map_data = mapfile.read()
+
+    #reading map file
+    map_data = map_data.split("-")
+
+    map_size = map_data[len(map_data) - 1] #map dimensions
+    map_data.remove(map_size)
+    map_size = map_size.split(",")
+    map_size[0] = int(map_size[0]) * tile_size
+    map_size[1] = int(map_size[1]) * tile_size
+
+    global tiles 
+    tiles = []
+
+    for tile in range(len(map_data)):
+        map_data[tile] = map_data[tile].replace("\n", "")
+        tiles.append(map_data[tile].split(":"))             #split texture from position
+
+    for tile in tiles:
+        tile[0] = tile[0].split(",")#position into list
+        pos = tile[0]
+        for p in pos:
+            pos[pos.index(p)] = int(p)#convert to int
+        tiles[tiles.index(tile)] = (pos, tile[1])#save tile to list
+
+    terrain = pygame.Surface(map_size, pygame.HWSURFACE)
+
+    for tile in tiles:
+        # if tile[1] in Texture_Tags:
+        #   add_tile(Texture_Tags[tile[1]], tile[0], terrain)
+        if int(tile[1]) == 1:
+            index = Grass()
+            TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        elif int(tile[1]) == 2:
+            index = Stone()
+            TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        elif int(tile[1]) == 3:
+            index = Water()
+            TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        elif int(tile[1]) == 0:
+            index = Nothing()
+            TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+
+    return terrain
+
+terrain = load_map("/home/ryanh/Desktop/projgame/maps/world.map")
+
+# map_data = []
+# for x in range(20):
+#     for y in range(15):
+#         map_data.append((x, y, "3"))
+# for x in range(2, 18):
+#     for y in range(2, 13):
+#         map_data.append((x, y, "1"))
 
 #GAME LOOP
 

@@ -10,8 +10,12 @@ def Stone():
 def Water():
 	return 1442
 
+def Nothing():
+	return 0
+
 Texture_Tags = {
 "1" : Grass, 
 "2" : Stone, 
 "3" : Water,
+"0" : Nothing,
 }
