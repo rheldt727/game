@@ -1,6 +1,6 @@
 
 from character import *
-from container import *
+from items.container import *
 
 class Player(Character):
 	def __init__(self, name, hp, s, i):

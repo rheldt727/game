@@ -1,12 +1,16 @@
 import os, pygame, time, random, sys
+
+pygame.init()
+
 from commands import *
-from player import *
-from util import *
-from item import *
-from weapon import *
-from armor import *
-from textures import *
-from spritesheet import *
+from characters.player import *
+from utilities.util import *
+from items.item import *
+from items.weapon import *
+from items.armor import *
+from utilities.textures import *
+from utilities.spritesheet import *
+
 
 commands = {
         'help': help,
@@ -27,8 +31,6 @@ green = (0,203,42)
 blue = (0,61,204)
 indigo = (29,0,51)
 violet = (138,43,226)
-
-pygame.init()
 
 #MSG TO WINDOW
 

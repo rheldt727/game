@@ -1,7 +1,20 @@
 import pygame, sys, math
-from textures import *
+from utilities.textures import *
 
+pygame.init()
 
+from utilities.spritesheet import *
+
+#CLRS
+white = (255,255,255)
+black = (0,0,0)
+red = (240,32,32)
+orange = (255,150,0)
+yellow = (234,237,27)
+green = (0,203,42)
+blue = (0,61,204)
+indigo = (29,0,51)
+violet = (138,43,226)
 
 def export_map(file):
     map_data = ""
@@ -18,17 +31,63 @@ def export_map(file):
 
     # Save Map Tiles
     for tile in tile_data:
-        map_data = map_data + str(int(tile[0] / Tiles.Size)) + "," + str(int(tile[1] / Tiles.Size)) + ":" + tile[2] + "-"
+        map_data = map_data + str(int(tile[0] / tile_size)) + "," + str(int(tile[1] / tile_size)) + ":" + tile[2] + "-"
         
 
     # Save Map Dimensions
-    map_data = map_data + str(int(max_x / Tiles.Size)) + "," + str(int(max_y / Tiles.Size))
+    map_data = map_data + str(int(max_x / tile_size)) + "," + str(int(max_y / tile_size))
 
 
     # Write Map File
     with open(file, "w") as mapfile:
         mapfile.write(map_data)
 
+def load_map(file):
+    global tile_data, tile_size
+    with open(file, "r") as mapfile:
+        map_data = mapfile.read()
+
+    map_data = map_data.split("-")
+
+    map_size = map_data[len(map_data) - 1] #map dimensions
+    map_data.remove(map_size)
+    map_size = map_size.split(",")
+    map_size[0] = int(map_size[0]) * tile_size
+    map_size[1] = int(map_size[1]) * tile_size
+
+    global tiles 
+    tiles = []
+
+    for tile in range(len(map_data)):
+        map_data[tile] = map_data[tile].replace("\n", "")
+        tiles.append(map_data[tile].split(":"))             #split texture from position
+
+    for tile in tiles:
+        tile[0] = tile[0].split(",")#position into list
+        pos = tile[0]
+        for p in pos:
+            pos[pos.index(p)] = int(p)#convert to int
+        tiles[tiles.index(tile)] = [pos[0] * tile_size, pos[1] * tile_size, tile[1]]#save tile to list
+
+    tile_data = tiles
+
+    # for tile in tiles:
+    #     # if tile[1] in Texture_Tags:
+    #     #   add_tile(Texture_Tags[tile[1]], tile[0], terrain)
+    #     if int(tile[1]) == 1:
+    #         index = Grass()
+    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+    #     elif int(tile[1]) == 2:
+    #         index = Stone()
+    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+    #     elif int(tile[1]) == 3:
+    #         index = Water()
+    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+    #     elif int(tile[1]) == 0:
+    #         index = Nothing()
+    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+
+    # return terrain
 
 
 window = pygame.display.set_mode((1280, 720), pygame.HWSURFACE)
@@ -38,7 +97,11 @@ clock = pygame.time.Clock()
 FPS = 60
 
 
-txt_font = pygame.font.Font("comicsansms", 20)
+txt_font = pygame.font.SysFont("comicsansms", 20)
+
+TILESHEET = spritesheet("itemsheet.jpg", 64, 95)
+CENTER_HANDLE = 0
+index = 0
 
 mouse_pos = 0
 mouse_x, mouse_y = 0, 0
@@ -47,7 +110,7 @@ map_width, map_height = 100 * tile_size, 100 * tile_size
 
 
 selector = pygame.Surface((tile_size, tile_size), pygame.HWSURFACE|pygame.SRCALPHA)
-selector.fill(Color.WithAlpha(100, (29,0,51)))
+selector.fill(violet)
 
 tile_data = []
 
@@ -60,8 +123,8 @@ brush = "5"
 
 
 # Initialize Default Map
-for x in range(0, map_width, Tiles.Size):
-    for y in range(0, map_height, Tiles.Size):
+for x in range(0, map_width, tile_size):
+    for y in range(0, map_height, tile_size):
         tile_data.append([x, y, "1"])
 
 
@@ -87,18 +150,26 @@ while isRunning:
                 camera_move = 4
 
             # BRUSHES
-            if event.key == pygame.K_F4:
+            if event.key == pygame.K_p:
                 brush = "r"
-            elif event.key == pygame.K_F1:
+            elif event.key == pygame.K_t:
                 selection = input("Brush Tag: ")
                 brush = selection
 
 
             # SAVE MAP
-            if event.key == pygame.K_F11:
+            if event.key == pygame.K_c:
                 name = input("Map Name: ")
                 export_map(name + ".map")
                 print("Map Saved Successfully!")
+
+            #LOAD MAP
+            elif event.key == pygame.K_l:
+                name = raw_input("Map Name: ")
+                load_map(name + ".map")
+                print("Map Loaded Successfully!")
+
+
             
 
         elif event.type == pygame.KEYUP:
@@ -155,26 +226,24 @@ while isRunning:
 
     # RENDER GRAPHICS
 
-    window.fill((0,61,204))
+    window.fill(blue)
 
 
     # Draw Map
     for tile in tile_data:
-        try:
-            if int(tile[2]) == 1:
-                index = Grass()
-                TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-            elif int(tile[2]) == 2:
-                index = Stone()
-                TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-            elif int(tile[2]) == 3:
-                index = Water()
-                TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-            elif int(tile[2]) == 0:
-                index = Nothing()
-                TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-        except:
-            pass
+        if tile[2] == 1:
+            index = Grass()
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        elif tile[2] == 2:
+            index = Stone()
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        elif tile[2] == 3:
+            index = Water()
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        elif tile[2] == 0:
+            index = Nothing()
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        
 
 
     # Draw Tile Highlighter (Selector)
