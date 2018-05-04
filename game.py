@@ -56,7 +56,7 @@ def message_to_screen(msg,color, y_displace = 0, size = "small"):
 
 def create_window():
     global window, display_height, display_width, window_title
-    display_width, display_height = 800, 600
+    display_width, display_height = 1280, 720
     window_title = "First RPG"
     pygame.display.set_caption(window_title)
     window = pygame.display.set_mode((display_width, display_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
@@ -197,14 +197,6 @@ def load_map(file):
     return terrain
 
 terrain = load_map("/home/ryanh/Desktop/projgame/maps/world.map")
-
-# map_data = []
-# for x in range(20):
-#     for y in range(15):
-#         map_data.append((x, y, "3"))
-# for x in range(2, 18):
-#     for y in range(2, 13):
-#         map_data.append((x, y, "1"))
 
 #GAME LOOP
 

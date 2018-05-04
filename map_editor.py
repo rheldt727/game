@@ -4,6 +4,7 @@ from utilities.textures import *
 pygame.init()
 
 from utilities.spritesheet import *
+pygame.mixer.music.load("/home/ryanh/Desktop/projgame/music/8-Bit Wii Shop Channel Music.wav")
 
 #CLRS
 white = (255,255,255)
@@ -71,24 +72,6 @@ def load_map(file):
 
     tile_data = tiles
 
-    # for tile in tiles:
-    #     # if tile[1] in Texture_Tags:
-    #     #   add_tile(Texture_Tags[tile[1]], tile[0], terrain)
-    #     if int(tile[1]) == 1:
-    #         index = Grass()
-    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-    #     elif int(tile[1]) == 2:
-    #         index = Stone()
-    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-    #     elif int(tile[1]) == 3:
-    #         index = Water()
-    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-    #     elif int(tile[1]) == 0:
-    #         index = Nothing()
-    #         TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-
-    # return terrain
-
 
 window = pygame.display.set_mode((1280, 720), pygame.HWSURFACE)
 pygame.display.set_caption("Map Editor")
@@ -118,7 +101,7 @@ camera_x, camera_y = 0, 0
 camera_move = 0
 
 
-brush = "5"
+brush = "1234567890"
 
 
 
@@ -126,6 +109,7 @@ brush = "5"
 for x in range(0, map_width, tile_size):
     for y in range(0, map_height, tile_size):
         tile_data.append([x, y, "1"])
+        
 
 
 
@@ -134,6 +118,7 @@ isRunning = True
 
 
 while isRunning:
+    pygame.mixer.music.play(-1)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             isRunning = False
@@ -150,7 +135,7 @@ while isRunning:
                 camera_move = 4
 
             # BRUSHES
-            if event.key == pygame.K_p:
+            if event.key == pygame.K_r:
                 brush = "r"
             elif event.key == pygame.K_t:
                 selection = input("Brush Tag: ")
@@ -159,7 +144,7 @@ while isRunning:
 
             # SAVE MAP
             if event.key == pygame.K_c:
-                name = input("Map Name: ")
+                name = raw_input("Map Name: ")
                 export_map(name + ".map")
                 print("Map Saved Successfully!")
 
@@ -181,7 +166,7 @@ while isRunning:
             mouse_y = math.floor(mouse_pos[1] / tile_size) * tile_size
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            tile = [mouse_x - camera_x, mouse_y - camera_y, brush]   # Keep this as a list
+            tile = [mouse_x - camera_x, mouse_y - camera_y, str(brush)]   # Keep this as a list
 
             # Is a tile already placed here?
             found = False
@@ -194,6 +179,7 @@ while isRunning:
             if not found:
                 if not brush == "r":
                     tile_data.append(tile)
+                    print(tile)
 
             # If this tile space is not empty
             else:
@@ -206,7 +192,6 @@ while isRunning:
                             print("Tile Removed!")
 
                 else:
-                    # Sorry! A tile is already placed here!
                     print("A tile is already placed here!")
                             
 
@@ -231,18 +216,18 @@ while isRunning:
 
     # Draw Map
     for tile in tile_data:
-        if tile[2] == 1:
+        if tile[2] == "1":
             index = Grass()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-        elif tile[2] == 2:
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+        elif tile[2] == "2":
             index = Stone()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-        elif tile[2] == 3:
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+        elif tile[2] == "3":
             index = Water()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
-        elif tile[2] == 0:
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+        elif tile[2] == "0":
             index = Nothing()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
         
 
 
