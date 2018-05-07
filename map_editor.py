@@ -108,137 +108,139 @@ brush = "1234567890"
 # Initialize Default Map
 for x in range(0, map_width, tile_size):
     for y in range(0, map_height, tile_size):
-        tile_data.append([x, y, "1"])
+        tile_data.append([x, y, "3"])
         
 
 
 
 
 isRunning = True
+musicPlaying = True
 
 
-while isRunning:
-    pygame.mixer.music.play(-1)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            isRunning = False
-        if event.type == pygame.KEYDOWN:
+while musicPlaying:
+    #pygame.mixer.music.play(-1)
+    while isRunning:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                isRunning = False
+                musicPlaying = False
+            if event.type == pygame.KEYDOWN:
 
-            # MOVEMENT
-            if event.key == pygame.K_w:
-                camera_move = 1
-            elif event.key == pygame.K_s:
-                camera_move = 2
-            elif event.key == pygame.K_a:
-                camera_move = 3
-            elif event.key == pygame.K_d:
-                camera_move = 4
+                # MOVEMENT
+                if event.key == pygame.K_w:
+                    camera_move = 1
+                elif event.key == pygame.K_s:
+                    camera_move = 2
+                elif event.key == pygame.K_a:
+                    camera_move = 3
+                elif event.key == pygame.K_d:
+                    camera_move = 4
 
-            # BRUSHES
-            if event.key == pygame.K_r:
-                brush = "r"
-            elif event.key == pygame.K_t:
-                selection = input("Brush Tag: ")
-                brush = selection
-
-
-            # SAVE MAP
-            if event.key == pygame.K_c:
-                name = raw_input("Map Name: ")
-                export_map(name + ".map")
-                print("Map Saved Successfully!")
-
-            #LOAD MAP
-            elif event.key == pygame.K_l:
-                name = raw_input("Map Name: ")
-                load_map(name + ".map")
-                print("Map Loaded Successfully!")
+                # BRUSHES
+                if event.key == pygame.K_r:
+                    brush = "r"
+                elif event.key == pygame.K_t:
+                    selection = input("Brush Tag: ")
+                    brush = selection
 
 
+                # SAVE MAP
+                if event.key == pygame.K_c:
+                    name = raw_input("Map Name: ")
+                    export_map(name + ".map")
+                    print("Map Saved Successfully!")
+
+                #LOAD MAP
+                elif event.key == pygame.K_l:
+                    name = raw_input("Map Name: ")
+                    load_map(name + ".map")
+                    print("Map Loaded Successfully!")
+
+
+                
+
+            elif event.type == pygame.KEYUP:
+                camera_move = 0
+
+            if event.type == pygame.MOUSEMOTION:
+                mouse_pos = pygame.mouse.get_pos()
+                mouse_x = math.floor(mouse_pos[0] / tile_size) * tile_size
+                mouse_y = math.floor(mouse_pos[1] / tile_size) * tile_size
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                tile = [mouse_x - camera_x, mouse_y - camera_y, str(brush)]   # Keep this as a list
+
+                # Is a tile already placed here?
+                found = False
+                for t in tile_data:
+                    if t[0] == tile[0] and t[1] == tile[1]:
+                        found = True
+                        break
+
+                # If this tile space is empty
+                if not found:
+                    if not brush == "r":
+                        tile_data.append(tile)
+
+                # If this tile space is not empty
+                else:
+                    # Are we using the rubber tool?
+                    if brush == "r":
+                        # Remove Tile
+                        for t in tile_data:
+                            if t[0] == tile[0] and t[1] == tile[1]:
+                                tile_data.remove(t)
+                                
+
+                    else:
+                        pass
+                                
+
+
+
+        # LOGIC
+        if camera_move == 1:
+            camera_y += tile_size
+        elif camera_move == 2:
+            camera_y -= tile_size
+        elif camera_move == 3:
+            camera_x += tile_size
+        elif camera_move == 4:
+            camera_x -= tile_size
+
+
+
+        # RENDER GRAPHICS
+
+        window.fill(blue)
+
+
+        # Draw Map
+        for tile in tile_data:
+            if tile[2] == "1":
+                index = Grass()
+                TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+            elif tile[2] == "2":
+                index = Stone()
+                TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+            elif tile[2] == "3":
+                index = Water()
+                TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+            elif tile[2] == "0":
+                index = Nothing()
+                TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
             
 
-        elif event.type == pygame.KEYUP:
-            camera_move = 0
 
-        if event.type == pygame.MOUSEMOTION:
-            mouse_pos = pygame.mouse.get_pos()
-            mouse_x = math.floor(mouse_pos[0] / tile_size) * tile_size
-            mouse_y = math.floor(mouse_pos[1] / tile_size) * tile_size
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            tile = [mouse_x - camera_x, mouse_y - camera_y, str(brush)]   # Keep this as a list
-
-            # Is a tile already placed here?
-            found = False
-            for t in tile_data:
-                if t[0] == tile[0] and t[1] == tile[1]:
-                    found = True
-                    break
-
-            # If this tile space is empty
-            if not found:
-                if not brush == "r":
-                    tile_data.append(tile)
-                    print(tile)
-
-            # If this tile space is not empty
-            else:
-                # Are we using the rubber tool?
-                if brush == "r":
-                    # Remove Tile
-                    for t in tile_data:
-                        if t[0] == tile[0] and t[1] == tile[1]:
-                            tile_data.remove(t)
-                            print("Tile Removed!")
-
-                else:
-                    print("A tile is already placed here!")
-                            
-
-
-
-    # LOGIC
-    if camera_move == 1:
-        camera_y += tile_size
-    elif camera_move == 2:
-        camera_y -= tile_size
-    elif camera_move == 3:
-        camera_x += tile_size
-    elif camera_move == 4:
-        camera_x -= tile_size
-
-
-
-    # RENDER GRAPHICS
-
-    window.fill(blue)
-
-
-    # Draw Map
-    for tile in tile_data:
-        if tile[2] == "1":
-            index = Grass()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
-        elif tile[2] == "2":
-            index = Stone()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
-        elif tile[2] == "3":
-            index = Water()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
-        elif tile[2] == "0":
-            index = Nothing()
-            TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+        # Draw Tile Highlighter (Selector)
+        window.blit(selector, (mouse_x, mouse_y))
+        
         
 
+        pygame.display.update()
 
-    # Draw Tile Highlighter (Selector)
-    window.blit(selector, (mouse_x, mouse_y))
-    
-    
-
-    pygame.display.update()
-
-    clock.tick(FPS)
+        clock.tick(FPS)
 
 pygame.quit()
 sys.exit()

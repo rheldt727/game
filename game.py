@@ -159,8 +159,8 @@ def load_map(file):
     map_size = map_data[len(map_data) - 1] #map dimensions
     map_data.remove(map_size)
     map_size = map_size.split(",")
-    map_size[0] = int(map_size[0]) * tile_size
-    map_size[1] = int(map_size[1]) * tile_size
+    map_size[0] = (int(map_size[0]) + 1) * tile_size
+    map_size[1] = (int(map_size[1]) + 1)* tile_size
 
     global tiles 
     tiles = []
