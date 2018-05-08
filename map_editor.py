@@ -72,6 +72,10 @@ def load_map(file):
 
     tile_data = tiles
 
+    terrain = pygame.Surface(map_size, pygame.HWSURFACE)
+
+    return terrain
+
 
 window = pygame.display.set_mode((1280, 720), pygame.HWSURFACE)
 pygame.display.set_caption("Map Editor")
@@ -101,7 +105,7 @@ camera_x, camera_y = 0, 0
 camera_move = 0
 
 
-brush = "1234567890"
+brush = "1"
 
 
 
@@ -226,6 +230,9 @@ while musicPlaying:
                 TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
             elif tile[2] == "3":
                 index = Water()
+                TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
+            elif tile[2] == "4":
+                index = Sand()
                 TILESHEET.draw(window, index%TILESHEET.totalCellCount, tile[0] + camera_x, tile[1] + camera_y, CENTER_HANDLE)
             elif tile[2] == "0":
                 index = Nothing()

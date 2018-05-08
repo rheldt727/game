@@ -190,6 +190,9 @@ def load_map(file):
         elif int(tile[1]) == 3:
             index = Water()
             TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
+        elif int(tile[1]) == 4:
+            index = Sand()
+            TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
         elif int(tile[1]) == 0:
             index = Nothing()
             TILESHEET.draw(terrain, index%TILESHEET.totalCellCount, tile[0][0] * tile_size, tile[0][1] * tile_size, CENTER_HANDLE)
@@ -236,26 +239,11 @@ while isRunning:
     #RENDER
     window.fill(white)
 
+    # - TILES
+
     window.blit(terrain, (Globes.camera_x, Globes.camera_y))
 
-    
-
-    # - TILES
-    # for x in range(0, 640, tile_size):
-    #     for y in range(0, 480, tile_size):
-    #         for i in map_data:
-    #             tile = (i[0] * tile_size, i[1] * tile_size)
-    #             if (x,y) == tile:
-    #                 if (i[2]) == "1":
-    #                     index = Grass()
-    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globes.camera_x, y + Globes.camera_y, CENTER_HANDLE)
-    #                 elif (i[2]) == "2":
-    #                     index = Stone()
-    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globes.camera_x, y + Globes.camera_y, CENTER_HANDLE)
-    #                 elif (i[2]) == "3":
-    #                     index = Water()
-    #                     TILESHEET.draw(window, index%TILESHEET.totalCellCount, x + Globes.camera_x, y + Globes.camera_y, CENTER_HANDLE)
-            
+    # - UPDATE
 
     pygame.display.update()
 
@@ -263,87 +251,4 @@ while isRunning:
    
 pygame.quit()
 sys.exit()
-
-
-
-
-
-
-'''#display
-display_width = 1920
-display_height = 1080
-gameDisplay = pygame.display.set_mode((display_width, display_height))
-
-#game stuff
-pygame.display.set_caption('Big Guy Lil Sword')
-icon = pygame.image.load('')
-pygame.display.set_icon(icon)
-
-#variables
-clock = pygame.time.Clock()
-
-
-#sprites
-
-
-#functions
-
-#text objects
-def text_objects(text,color,size):
-    if size == "small":
-    	textSurface = smallfont.render(text, True, color)
-    elif size == "med":
-    	textSurface = medfont.render(text, True, color)
-    elif size == "large":
-    	textSurface = largefont.render(text, True, color)
-    return textSurface, textSurface.get_rect()
-     
-#message
-def message_to_screen(msg,color, y_displace = 0, size = "small"):
-    textSurf, textRect = text_objects(msg,color,size)
-    textRect.center = (display_width / 2), (display_height / 2) + y_displace
-    gameDisplay.blit(textSurf, textRect)
-
-#intro
-def gameStart():
-    intro = True
-    while intro == True:
-
-        for event in pygame.event.get():
-    	    if event.type == pygame.QUIT:
-        	pygame.quit()
-        	quit()
-            if event.type == pygame.KEYDOWN:
-        	intro = False    
-
-
-    	gameDisplay.fill(white)
-    	pygame.display.update()
-    	clock.tick(15)
     
-
-#pause
-def pause():
-    pause = True
-    while paused:
-	for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-        	pygame.quit()
-        	quit()
-            if event.type == pygame.KEYDOWN:
-        	if event.key == pygame.K_p:
-            	    paused = False
-	message_to_screen("PAUSED", black, 0, "large")
-        pygame.display.update()
-        clock.tick(5)
-
-#game Loop
-def gameLoop():'''
-    
-
-
-
-
-
-
-
