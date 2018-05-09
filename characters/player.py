@@ -8,6 +8,7 @@ class Player(Character):
 		self.s = s
 		self.i = i
 		self.inventory = Container("Inventory")
+		
 
 	def die(self, message = "Game Over!"):
 		print(message)

@@ -10,6 +10,7 @@ from items.weapon import *
 from items.armor import *
 from utilities.textures import *
 from utilities.spritesheet import *
+from characters.NPC import *
 
 
 commands = {
@@ -133,6 +134,8 @@ def runCMD(cmd, args, player):
 
 player = Player("Default", 1, 1, 1)
 
+direction = "south"
+
 clock = pygame.time.Clock()
 
 isRunning = True
@@ -144,8 +147,13 @@ create_window()
 #TEXTURES
 
 TILESHEET = spritesheet("itemsheet.jpg", 64, 95)
+MAIN_CHARACTERSHEET = spritesheet("BODY_male.png", 9, 4)
 CENTER_HANDLE = 0
 index = 0
+
+player_x = (display_width / 2 - tile_size / 2 - Globes.camera_x) / tile_size
+player_y = (display_height / 2 - tile_size / 2 - Globes.camera_y) / tile_size
+
 
 #MAP
 
@@ -242,6 +250,19 @@ while isRunning:
     # - TILES
 
     window.blit(terrain, (Globes.camera_x, Globes.camera_y))
+
+    # - CHARACTERS
+
+    # -- MAIN
+
+    if direction == "north":
+        MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
+    elif direction == "south":
+        MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
+    elif direction == "east":
+        MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
+    elif direction == "west":
+        MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
 
     # - UPDATE
 
