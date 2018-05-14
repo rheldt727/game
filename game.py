@@ -208,7 +208,7 @@ terrain = load_map("/home/ryanh/Desktop/projgame/maps/world.map")
 Globes = Globals()
 
 player_x = (display_width / 2 - tile_size / 2 - Globes.camera_x) / tile_size
-player_y = ((display_height / 2 - tile_size / 2 - Globes.camera_y) / tile_size) - 1
+player_y = ((display_height / 2 - tile_size / 2 - Globes.camera_y) / tile_size) - tile_size
 
 #ANIMATION
 
@@ -224,7 +224,6 @@ def East():
 #FINAL ANIMATION FUNC - APPLY TO OTHERS
 def walkNorth():
     while Globes.camera_move == 1:
-        print(Globes.camera_move)#UNDO AFTER FIX
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
@@ -237,14 +236,15 @@ def walkNorth():
         window.fill(white)
 
         for index in range(1, 9):
-            Globes.camera_y += 4
             window.blit(terrain, (Globes.camera_x, Globes.camera_y))
             MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
             pygame.display.update()
 
-            time.sleep(0.1)
+            Globes.camera_y += 4
 
-        clock.tick(400)
+            time.sleep(0.035)
+
+        clock.tick(FPS)
 
     index = North()
     MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
@@ -252,80 +252,82 @@ def walkNorth():
 def walkSouth():
     while Globes.camera_move == 2:
         for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    Globes.camera_move = 2
+            elif event.type == pygame.KEYUP:
                 Globes.camera_move = 0
 
         #RENDER
         window.fill(white)
 
         # - TILES
-
-        window.blit(terrain, (Globes.camera_x, Globes.camera_y))
         
-        for i in range(19, 27):
-            Globes.camera_y -= 4
-            index = i
+        for index in range(19, 27):
+            window.blit(terrain, (Globes.camera_x, Globes.camera_y))
             MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
             pygame.display.update()
-            time.sleep(0.1)
+            
+            Globes.camera_y -= 4
+
+            time.sleep(0.035)
 
         clock.tick(FPS)
 
     index = South()
     MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
-    pygame.display.update()
 
 def walkWest():
     while Globes.camera_move == 3:
         for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    Globes.camera_move = 3
+            elif event.type == pygame.KEYUP:
                 Globes.camera_move = 0
 
         #RENDER
         window.fill(white)
 
-        # - TILES
-
-        window.blit(terrain, (Globes.camera_x, Globes.camera_y))
-        
-        for i in range(10, 18):
-            Globes.camera_x += 4
-            index = i
+        for index in range(10, 18):
+            window.blit(terrain, (Globes.camera_x, Globes.camera_y))
             MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
             pygame.display.update()
-            time.sleep(0.1)
+
+            Globes.camera_x += 4
+
+            time.sleep(0.035)
 
         clock.tick(FPS)
 
     index = West()
     MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
-    pygame.display.update()
 
 def walkEast():
     while Globes.camera_move == 4:
         for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_d:
+                    Globes.camera_move = 4
+            elif event.type == pygame.KEYUP:
                 Globes.camera_move = 0
 
         #RENDER
         window.fill(white)
-
-        # - TILES
-
-        window.blit(terrain, (Globes.camera_x, Globes.camera_y))
         
-        for i in range(28, 36):
-            Globes.camera_x -= 4
-            index = i
+        for index in range(28, 36):
+            window.blit(terrain, (Globes.camera_x, Globes.camera_y))
             MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
             pygame.display.update()
-            time.sleep(0.1)
+
+            Globes.camera_x -= 4
+
+            time.sleep(0.035)
 
         clock.tick(FPS)
 
     index = East()
     MAIN_CHARACTERSHEET.draw(window, index%TILESHEET.totalCellCount, display_width / 2 - tile_size / 2, display_height / 2 - tile_size / 2, CENTER_HANDLE)
-    pygame.display.update()
 
 #GAME LOOP
 
@@ -386,6 +388,9 @@ while isRunning:
     pygame.display.update()
 
     clock.tick(FPS)
+
+    #print("[" + str(player_x) + "," + str(player_y) + "]")
+    #print(str(Globes.camera_x))
    
 pygame.quit()
 sys.exit()
