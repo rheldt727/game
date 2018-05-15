@@ -220,6 +220,7 @@ def West():
     return 9
 def East():
     return 27
+walkSpeed = 0.025
 
 #FINAL ANIMATION FUNC - APPLY TO OTHERS
 def walkNorth():
@@ -242,7 +243,7 @@ def walkNorth():
 
             Globes.camera_y += 4
 
-            time.sleep(0.035)
+            time.sleep(walkSpeed)
 
         clock.tick(FPS)
 
@@ -270,7 +271,7 @@ def walkSouth():
             
             Globes.camera_y -= 4
 
-            time.sleep(0.035)
+            time.sleep(walkSpeed)
 
         clock.tick(FPS)
 
@@ -296,7 +297,7 @@ def walkWest():
 
             Globes.camera_x += 4
 
-            time.sleep(0.035)
+            time.sleep(walkSpeed)
 
         clock.tick(FPS)
 
@@ -322,7 +323,7 @@ def walkEast():
 
             Globes.camera_x -= 4
 
-            time.sleep(0.035)
+            time.sleep(walkSpeed)
 
         clock.tick(FPS)
 
