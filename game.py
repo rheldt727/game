@@ -220,12 +220,15 @@ def West():
     return 9
 def East():
     return 27
+
 walkSpeed = 0.025
 
 #FINAL ANIMATION FUNC - APPLY TO OTHERS
 def walkNorth():
     while Globes.camera_move == 1:
+        print(str(Globes.camera_move))
         for event in pygame.event.get():
+            print(event)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     Globes.camera_move = 1
@@ -354,6 +357,7 @@ while isRunning:
                 direction = "east"
                 Globes.camera_move = 4
 
+        
     #LOGIC
     # if Globes.camera_move == 1:
     #     Globes.camera_y += tile_size
@@ -374,7 +378,6 @@ while isRunning:
     # - CHARACTERS
 
     # -- MAIN
-
     if direction == "north":
         walkNorth()
     elif direction == "south":
