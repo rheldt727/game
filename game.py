@@ -1,5 +1,4 @@
-import os, pygame, time, random, sys
-from multiprocessing import Process
+import os, pygame, time, random, sys, threading
 
 pygame.init()
 
@@ -207,8 +206,7 @@ terrain = load_map("/home/ryanh/Desktop/projgame/maps/world.map")
 
 Globes = Globals()
 
-player_x = (display_width / 2 - tile_size / 2 - Globes.camera_x) / tile_size
-player_y = ((display_height / 2 - tile_size / 2 - Globes.camera_y) / tile_size) - tile_size
+
 
 #ANIMATION
 
@@ -223,12 +221,14 @@ def East():
 
 walkSpeed = 0.025
 
+threads = []
+
 #FINAL ANIMATION FUNC - APPLY TO OTHERS
 def walkNorth():
     while Globes.camera_move == 1:
-        print(str(Globes.camera_move))
+        #print(str(Globes.camera_move))
         for event in pygame.event.get():
-            print(event)
+            #print(event)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     Globes.camera_move = 1
@@ -336,6 +336,8 @@ def walkEast():
 #GAME LOOP
 
 while isRunning:
+    player_x = ((display_width / 2 - tile_size / 2 - Globes.camera_x) / tile_size) + 1
+    player_y = ((display_height / 2 - tile_size / 2 - Globes.camera_y) / tile_size) + 2
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             isRunning = False

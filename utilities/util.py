@@ -14,7 +14,7 @@ def yesOrNo(prompt = "(Y/N)?"):
 		answer = answer.strip()
 		answer = answer.lower()
 
-		yes = ['yes', 'y', 'ye', 'Y', 'Yes', 'YES', 'YEs', 'yup', 'yep', 'Yup', 'YUP', 'YUp', 'Yep', 'YEP', 'YEp', 'yuh']
+		yes = ['yes', 'y', 'ye', 'Y', 'Yes', 'YES', 'YEs', 'yup', 'yep', 'Yup', 'YUP', 'YUp', 'Yep', 'YEP', 'YEp', 'yuh', 'yeet', 'YEET']
 		no = ['no', 'n', 'No', 'NO', 'N', 'nope', 'NOPE', 'Nope', 'nah']
 
 		if answer in yes:
